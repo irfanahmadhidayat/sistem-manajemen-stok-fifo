@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('gambar');
             $table->integer('stok_minimum');
             $table->integer('stok')->nullable()->default(0);
+            $table->foreignId('jenis_id')->constrained('jenis');
+            $table->foreignId('satuan_id')->constrained('satuans');
             $table->timestamps();
         });
     }

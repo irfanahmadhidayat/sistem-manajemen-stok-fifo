@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('barang_keluars', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal_keluar');
             $table->string('nama_barang');
+            $table->date('tanggal_keluar');
+            $table->date('tanggal_kadaluwarsa');
             $table->integer('jumlah_keluar');
             $table->timestamps();
         });
