@@ -31,7 +31,7 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            <div class="content-header">
+            <div class="content-header mx-3">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
@@ -49,7 +49,7 @@
             <!-- /.content-header -->
 
             <!-- Main content -->
-            <div class="content">
+            <div class="content mx-3">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-6">
