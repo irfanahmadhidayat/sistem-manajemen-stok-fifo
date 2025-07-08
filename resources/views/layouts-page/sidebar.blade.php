@@ -29,19 +29,22 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link active">
+                            <a href="{{ route('barang.index') }}"
+                                class="nav-link {{ request()->routeIs('barang.index') ? 'active' : '' }}">
                                 <i class="fas fa-tag nav-icon"></i>
                                 <p>Nama Barang</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('jenis-barang.index') }}"
+                                class="nav-link {{ request()->routeIs('jenis-barang.index') ? 'active' : '' }}">
                                 <i class="fas fa-th-list nav-icon"></i>
                                 <p>Jenis Barang</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('satuan-barang.index') }}"
+                                class="nav-link {{ request()->routeIs('satuan-barang.index') ? 'active' : '' }}">
                                 <i class="fas fa-ruler-combined nav-icon"></i>
                                 <p>Satuan Barang</p>
                             </a>
