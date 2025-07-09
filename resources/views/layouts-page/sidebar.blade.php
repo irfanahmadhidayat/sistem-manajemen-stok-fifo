@@ -19,8 +19,10 @@
 
                 <!-- DATA MASTER -->
                 <li class="nav-header">DATA MASTER</li>
-                <li class="nav-item menu-open">
-                    <a href="#" class="nav-link active">
+                <li
+                    class="nav-item {{ request()->routeIs('barang.index', 'jenis-barang.index', 'satuan-barang.index') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->routeIs('barang.index', 'jenis-barang.index', 'satuan-barang.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-box"></i>
                         <p>
                             Barang
@@ -55,13 +57,15 @@
                 <!-- TRANSAKSI -->
                 <li class="nav-header">TRANSAKSI</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('barang-masuk.index') }}"
+                        class="nav-link {{ request()->routeIs('barang-masuk.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-arrow-down"></i>
                         <p>Barang Masuk</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('barang-keluar.index') }}"
+                        class="nav-link {{ request()->routeIs('barang-keluar.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-arrow-up"></i>
                         <p>Barang Keluar</p>
                     </a>
