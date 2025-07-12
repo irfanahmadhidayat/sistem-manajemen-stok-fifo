@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use App\Models\Satuan;
+use App\Models\BarangMasuk;
 use App\Models\BarangKeluar;
 use Illuminate\Http\Request;
+use App\Models\BarangKeluarDetail;
 use Illuminate\Support\Facades\Validator;
 
 class BarangKeluarController extends Controller
@@ -83,41 +85,89 @@ class BarangKeluarController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_barang'       => 'required',
-            'tanggal_keluar'     => 'required',
-            'tanggal_kadaluwarsa' => 'required',
-            'jumlah_keluar'      => 'required',
+            'tanggal_keluar'    => 'required',
+            'jumlah_keluar'     => 'required',
         ], [
-            'nama_barang.required'      => 'Form Nama Barang Wajib Di Isi !',
-            'tanggal_keluar.required'    => 'Pilih Barang Terlebih Dahulu !',
-            'tanggal_kadaluwarsa.required' => 'Pilih Barang Terlebih Dahulu !',
-            'jumlah_keluar.required'     => 'Form Jumlah Stok Keluar Wajib Di Isi !'
+            'nama_barang.required' => 'Form Nama Barang Wajib Di Isi!',
+            'tanggal_keluar.required' => 'Tanggal keluar wajib diisi!',
+            'jumlah_keluar.required' => 'Jumlah stok keluar wajib diisi!',
         ]);
-
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $barangKeluar = BarangKeluar::create([
-            'nama_barang'       => $request->nama_barang,
-            'tanggal_keluar'     => $request->tanggal_keluar,
-            'tanggal_kadaluwarsa' => $request->tanggal_kadaluwarsa,
-            'jumlah_keluar'      => $request->jumlah_keluar,
-            'kode_transaksi'    => $request->kode_transaksi
-        ]);
+        $jumlahKeluar = $request->jumlah_keluar;
+        $namaBarang = $request->nama_barang;
 
-        if ($barangKeluar) {
-            $barang = Barang::where('nama_barang', $request->nama_barang)->first();
-            if ($barang) {
-                $barang->stok -= $request->jumlah_keluar;
-                $barang->save();
-            }
+        $barang = Barang::where('nama_barang', $namaBarang)->first();
+        if (!$barang || $barang->stok < $jumlahKeluar) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Total stok tidak mencukupi!'
+            ], 400);
         }
 
+        // Buat transaksi keluar terlebih dahulu
+        $barangKeluar = BarangKeluar::create([
+            'nama_barang'       => $namaBarang,
+            'tanggal_keluar'    => $request->tanggal_keluar,
+            'jumlah_keluar'     => $jumlahKeluar,
+            'kode_transaksi'    => $request->kode_transaksi,
+        ]);
+
+        // Ambil batch dengan sisa > 0 (FIFO)
+        $batches = BarangMasuk::where('nama_barang', $namaBarang)
+            ->where('sisa', '>', 0)
+            ->orderBy('tanggal_masuk')
+            ->get();
+
+        $sisaKeluar = $jumlahKeluar;
+
+        foreach ($batches as $batch) {
+            if ($sisaKeluar <= 0) break;
+
+            $ambil = min($batch->sisa, $sisaKeluar);
+
+            // Kurangi sisa di batch
+            $batch->sisa -= $ambil;
+            $batch->save();
+
+            // Simpan detail pengeluaran batch ini
+            BarangKeluarDetail::create([
+                'barang_keluar_id' => $barangKeluar->id,
+                'barang_masuk_id'  => $batch->id,
+                'jumlah_keluar'    => $ambil
+            ]);
+
+            $sisaKeluar -= $ambil;
+        }
+
+        if ($sisaKeluar > 0) {
+            // Rollback perubahan sisa batch
+            foreach ($barangKeluar->details as $detail) {
+                $batch = BarangMasuk::find($detail->barang_masuk_id);
+                $batch->sisa += $detail->jumlah_keluar;
+                $batch->save();
+            }
+
+            $barangKeluar->details()->delete();
+            $barangKeluar->delete();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Stok batch tidak mencukupi!'
+            ], 400);
+        }
+
+        // Update total stok
+        $barang->stok -= $jumlahKeluar;
+        $barang->save();
+
         return response()->json([
-            'success'   => true,
-            'message'   => 'Data Berhasil Disimpan !',
-            'data'      => $barangKeluar
+            'success' => true,
+            'message' => 'Barang keluar berhasil dicatat dengan FIFO!',
+            'data' => $barangKeluar->load('details.barangMasuk')
         ]);
     }
 
@@ -148,20 +198,44 @@ class BarangKeluarController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BarangKeluar $barangKeluar)
+    public function destroyBatch($kodeTransaksiKeluar)
     {
-        $jumlahKeluar = $barangKeluar->jumlah_keluar;
-        $barangKeluar->delete();
+        // Ambil semua baris yang punya kode_transaksi_keluar sama
+        $details = BarangKeluar::where('kode_transaksi', $kodeTransaksiKeluar)->get();
 
-        $barang = Barang::where('nama_barang', $barangKeluar->nama_barang)->first();
-        if ($barang) {
-            $barang->stok += $jumlahKeluar;
-            $barang->save();
+        if ($details->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak ditemukan.'
+            ], 404);
+        }
+
+        foreach ($details as $barangKeluar) {
+            $jumlahKeluar = $barangKeluar->jumlah_keluar;
+            $kodeTransaksiMasuk = $barangKeluar->kode_transaksi_masuk;
+            $namaBarang = $barangKeluar->nama_barang;
+
+            // Tambahkan kembali stok total barang
+            $barang = Barang::where('nama_barang', $namaBarang)->first();
+            if ($barang) {
+                $barang->stok += $jumlahKeluar;
+                $barang->save();
+            }
+
+            // Tambahkan kembali sisa pada batch masuk
+            $barangMasuk = BarangMasuk::where('kode_transaksi', $kodeTransaksiMasuk)->first();
+            if ($barangMasuk) {
+                $barangMasuk->sisa += $jumlahKeluar;
+                $barangMasuk->save();
+            }
+
+            // Hapus data keluar per baris
+            $barangKeluar->delete();
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Data Berhasil Dihapus!'
+            'message' => 'Data berhasil dihapus!'
         ]);
     }
 }

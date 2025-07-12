@@ -39,7 +39,6 @@
                                                 <th>Kode Transaksi</th>
                                                 <th>Nama Barang</th>
                                                 <th>Tanggal Keluar</th>
-                                                <th>Tanggal Kadaluwarsa</th>
                                                 <th>Jumlah Keluar</th>
                                                 <th>Opsi</th>
                                             </tr>
@@ -143,7 +142,6 @@
                     <td>${value.kode_transaksi}</td>
                     <td>${value.nama_barang}</td>
                     <td>${value.tanggal_keluar}</td>
-                    <td>${value.tanggal_kadaluwarsa}</td>
                     <td>${value.jumlah_keluar}</td>
                     <td>
                         <a href="javascript:void(0)" id="button_hapus_barangKeluar" data-id="${value.id}" class="btn btn-icon btn-danger btn-md mb-2"><i class="fas fa-trash"></i> </a>
@@ -171,7 +169,6 @@
             let kode_transaksi = $('#kode_transaksi').val();
             let nama_barang = $('#nama_barang').val();
             let tanggal_keluar = $('#tanggal_keluar').val();
-            let tanggal_kadaluwarsa = $('#tanggal_kadaluwarsa').val();
             let jumlah_keluar = $('#jumlah_keluar').val();
             let token = $("meta[name='csrf-token']").attr("content");
 
@@ -179,7 +176,6 @@
             formData.append('kode_transaksi', kode_transaksi);
             formData.append('nama_barang', nama_barang);
             formData.append('tanggal_keluar', tanggal_keluar);
-            formData.append('tanggal_kadaluwarsa', tanggal_kadaluwarsa);
             formData.append('jumlah_keluar', jumlah_keluar);
             formData.append('_token', token);
 
@@ -216,7 +212,6 @@
                                     <td>${value.kode_transaksi}</td>
                                     <td>${value.nama_barang}</td>
                                     <td>${value.tanggal_keluar}</td>
-                                    <td>${value.tanggal_kadaluwarsa}</td>
                                     <td>${value.jumlah_keluar}</td>
                                     <td>
                                         <a href="javascript:void(0)" id="button_hapus_barangKeluar" data-id="${value.id}" class="btn btn-icon btn-danger btn-lg mb-2"><i class="fas fa-trash"></i> </a>
@@ -230,7 +225,6 @@
                             $('#kode_transaksi').val('');
                             $('#nama_barang').val('');
                             $('#tanggal_keluar').val('');
-                            $('#tanggal_kadaluwarsa').val('');
                             $('#jumlah_keluar').val('');
                             $('#stok').val('');
 
@@ -264,12 +258,6 @@
                             .html(error.responseJSON.tanggal_keluar[0]);
                     }
 
-                    if (error.responseJSON && error.responseJSON.tanggal_kadaluwarsa && error
-                        .responseJSON.tanggal_kadaluwarsa[0]) {
-                        $('#alert-tanggal_kadaluwarsa').removeClass('d-none').addClass('d-block')
-                            .html(error.responseJSON.tanggal_kadaluwarsa[0]);
-                    }
-
                     if (error.responseJSON && error.responseJSON.jumlah_keluar && error.responseJSON
                         .jumlah_keluar[0]) {
                         $('#alert-jumlah_keluar').removeClass('d-none').addClass('d-block')
@@ -280,15 +268,15 @@
         });
     </script>
 
-    <!-- Hapus Data Barang -->
+    <!-- Hapus Data Barang Keluar -->
     <script>
         $('body').on('click', '#button_hapus_barangKeluar', function() {
-            let barangKeluar_id = $(this).data('id');
+            let kode_transaksi_keluar = $(this).data('kode');
             let token = $("meta[name='csrf-token']").attr("content");
 
             Swal.fire({
                 title: 'Apakah Kamu Yakin?',
-                text: "ingin menghapus data ini !",
+                text: "ingin menghapus transaksi ini beserta semua batch keluar?",
                 icon: 'warning',
                 showCancelButton: true,
                 cancelButtonText: 'TIDAK',
@@ -296,47 +284,29 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `/barang-keluar/${barangKeluar_id}`,
+                        url: `/barang-keluar/${kode_transaksi_keluar}/batch`,
                         type: "DELETE",
-                        cache: false,
                         data: {
                             "_token": token
                         },
                         success: function(response) {
                             Swal.fire({
-                                type: 'success',
                                 icon: 'success',
-                                title: `${response.message}`,
+                                title: response.message,
                                 showConfirmButton: true,
                                 timer: 3000
                             });
-                            $(`#index_${barangKeluar_id}`).remove();
 
-                            $.ajax({
-                                url: "/barang-keluar/get-data",
-                                type: "GET",
-                                dataType: 'JSON',
-                                success: function(response) {
-                                    let counter = 1;
-                                    $('#table_id').DataTable().clear();
-                                    $.each(response.data, function(key, value) {
-                                        let barangKeluar = `
-                                        <tr class="barang-row" id="index_${value.id}">
-                                            <td>${counter++}</td>   
-                                            <td>${value.kode_transaksi}</td>
-                                            <td>${value.nama_barang}</td>
-                                            <td>${value.tanggal_keluar}</td>
-                                            <td>${value.tanggal_kadaluwarsa}</td>
-                                            <td>${value.jumlah_keluar}</td>
-                                            <td>
-                                                <a href="javascript:void(0)" id="button_hapus_barangKeluar" data-id="${value.id}" class="btn btn-icon btn-danger btn-md mb-2"><i class="fas fa-trash"></i> </a>
-                                            </td>
-                                        </tr>
-                                    `;
-                                        $('#table_id').DataTable().row.add(
-                                            $(barangKeluar)).draw(false);
-                                    });
-                                }
+                            // Hilangkan baris tabel yang berkaitan
+                            $(`tr[data-kode='${kode_transaksi_keluar}']`).remove();
+
+                            // Atau reload tabel via AJAX jika diperlukan
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: xhr.responseJSON.message ?? 'Terjadi kesalahan.'
                             });
                         }
                     });

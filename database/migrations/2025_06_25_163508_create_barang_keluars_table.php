@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('kode_transaksi')->unique();
             $table->string('nama_barang');
             $table->date('tanggal_keluar');
-            $table->date('tanggal_kadaluwarsa');
             $table->integer('jumlah_keluar');
             $table->timestamps();
         });

@@ -10,7 +10,11 @@ class BarangKeluar extends Model
         'kode_transaksi',
         'nama_barang',
         'tanggal_keluar',
-        'tanggal_kadaluwarsa',
         'jumlah_keluar'
     ];
+
+    public function details()
+    {
+        return $this->hasMany(BarangKeluarDetail::class);
+    }
 }

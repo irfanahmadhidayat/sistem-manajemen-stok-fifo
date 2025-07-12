@@ -21,15 +21,6 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Tanggal Kadaluwarsa</label>
-                                <input type="date" class="form-control" name="tanggal_kadaluwarsa"
-                                    id="tanggal_kadaluwarsa" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
-                                <div class="alert alert-danger mt-2 d-none" role="alert"
-                                    id="alert-tanggal_kadaluwarsa">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
                                 <label>Kode Transaksi</label>
                                 <input type="text" class="form-control" name="kode_transaksi" id="kode_transaksi"
                                     readonly>
@@ -87,19 +78,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const tanggalKeluar = document.getElementById('tanggal_keluar');
-        const tanggalKadaluwarsa = document.getElementById('tanggal_kadaluwarsa');
 
         const today = new Date().toISOString().split('T')[0];
         tanggalKeluar.value = today;
 
         if (tanggalKeluar.showPicker) {
             tanggalKeluar.addEventListener('focus', function() {
-                this.showPicker();
-            });
-        }
-
-        if (tanggalKadaluwarsa.showPicker) {
-            tanggalKadaluwarsa.addEventListener('focus', function() {
                 this.showPicker();
             });
         }

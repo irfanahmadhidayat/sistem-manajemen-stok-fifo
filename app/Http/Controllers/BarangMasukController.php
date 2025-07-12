@@ -68,8 +68,8 @@ class BarangMasukController extends Controller
             'jumlah_masuk'      => 'required',
         ], [
             'nama_barang.required'      => 'Form Nama Barang Wajib Di Isi !',
-            'tanggal_masuk.required'    => 'Pilih Barang Terlebih Dahulu !',
-            'tanggal_kadaluwarsa.required' => 'Pilih Barang Terlebih Dahulu !',
+            'tanggal_masuk.required'    => 'Masukkan Tanggal Masuk Terlebih Dahulu !',
+            'tanggal_kadaluwarsa.required' => 'Masukkan Tanggal Kadaluwarsa Terlebih Dahulu !',
             'jumlah_masuk.required'     => 'Form Jumlah Stok Masuk Wajib Di Isi !'
         ]);
 
@@ -83,6 +83,7 @@ class BarangMasukController extends Controller
             'tanggal_masuk'     => $request->tanggal_masuk,
             'tanggal_kadaluwarsa' => $request->tanggal_kadaluwarsa,
             'jumlah_masuk'      => $request->jumlah_masuk,
+            'sisa' => $request->jumlah_masuk,
             'kode_transaksi'    => $request->kode_transaksi
         ]);
 
@@ -138,6 +139,9 @@ class BarangMasukController extends Controller
             $barang->stok -= $jumlahMasuk;
             $barang->save();
         }
+
+        BarangMasuk::where('nama_barang', $barangMasuk->nama_barang)
+            ->update(['sisa' => $barang->stok]);
 
         return response()->json([
             'success' => true,

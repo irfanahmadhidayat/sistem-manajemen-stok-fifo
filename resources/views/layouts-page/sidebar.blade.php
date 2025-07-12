@@ -74,9 +74,17 @@
                 <!-- LAPORAN -->
                 <li class="nav-header">LAPORAN</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('laporan-stok.index') }}"
+                        class="nav-link {{ request()->routeIs('laporan-stok.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-clipboard-list"></i>
                         <p>Stok Barang</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('stok.penjualan') }}"
+                        class="nav-link {{ request()->routeIs('stok.penjualan') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-clipboard-list"></i>
+                        <p>Stok Penjualan</p>
                     </a>
                 </li>
                 <li class="nav-item">

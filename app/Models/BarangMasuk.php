@@ -11,6 +11,12 @@ class BarangMasuk extends Model
         'nama_barang',
         'tanggal_masuk',
         'tanggal_kadaluwarsa',
-        'jumlah_masuk'
+        'jumlah_masuk',
+        'sisa'
     ];
+
+    public function keluarDetails()
+    {
+        return $this->hasMany(BarangKeluarDetail::class);
+    }
 }
