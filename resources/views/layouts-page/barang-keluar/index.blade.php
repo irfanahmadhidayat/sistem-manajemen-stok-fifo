@@ -271,12 +271,12 @@
     <!-- Hapus Data Barang Keluar -->
     <script>
         $('body').on('click', '#button_hapus_barangKeluar', function() {
-            let kode_transaksi_keluar = $(this).data('kode');
+            let barangKeluar_id = $(this).data('id');
             let token = $("meta[name='csrf-token']").attr("content");
 
             Swal.fire({
                 title: 'Apakah Kamu Yakin?',
-                text: "ingin menghapus transaksi ini beserta semua batch keluar?",
+                text: "ingin menghapus data ini !",
                 icon: 'warning',
                 showCancelButton: true,
                 cancelButtonText: 'TIDAK',
@@ -284,29 +284,46 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `/barang-keluar/${kode_transaksi_keluar}/batch`,
+                        url: `/barang-keluar/${barangKeluar_id}`,
                         type: "DELETE",
+                        cache: false,
                         data: {
                             "_token": token
                         },
                         success: function(response) {
                             Swal.fire({
+                                type: 'success',
                                 icon: 'success',
-                                title: response.message,
+                                title: `${response.message}`,
                                 showConfirmButton: true,
                                 timer: 3000
                             });
+                            $(`#index_${barangKeluar_id}`).remove();
 
-                            // Hilangkan baris tabel yang berkaitan
-                            $(`tr[data-kode='${kode_transaksi_keluar}']`).remove();
-
-                            // Atau reload tabel via AJAX jika diperlukan
-                        },
-                        error: function(xhr) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Gagal!',
-                                text: xhr.responseJSON.message ?? 'Terjadi kesalahan.'
+                            $.ajax({
+                                url: "/barang-keluar/get-data",
+                                type: "GET",
+                                dataType: 'JSON',
+                                success: function(response) {
+                                    let counter = 1;
+                                    $('#table_id').DataTable().clear();
+                                    $.each(response.data, function(key, value) {
+                                        let barangKeluar = `
+                                        <tr class="barang-row" id="index_${value.id}">
+                                            <td>${counter++}</td>   
+                                            <td>${value.kode_transaksi}</td>
+                                            <td>${value.nama_barang}</td>
+                                            <td>${value.tanggal_keluar}</td>
+                                            <td>${value.jumlah_keluar}</td>
+                                            <td>
+                                                <a href="javascript:void(0)" id="button_hapus_barangKeluar" data-id="${value.id}" class="btn btn-icon btn-danger btn-md mb-2"><i class="fas fa-trash"></i> </a>
+                                            </td>
+                                        </tr>
+                                    `;
+                                        $('#table_id').DataTable().row.add(
+                                            $(barangKeluar)).draw(false);
+                                    });
+                                }
                             });
                         }
                     });

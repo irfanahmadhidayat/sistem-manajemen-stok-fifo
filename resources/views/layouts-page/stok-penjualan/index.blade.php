@@ -28,6 +28,14 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
+                                @if ($namaBarangDipilih)
+                                    <div class="mb-3 text-right">
+                                        <a href="{{ route('stok.penjualan.print', ['nama_barang' => $namaBarangDipilih]) }}"
+                                            class="btn btn-danger" target="_blank">
+                                            <i class="fas fa-print"></i> &nbsp;Print PDF
+                                        </a>
+                                    </div>
+                                @endif
                                 <form method="GET" action="{{ route('stok.penjualan') }}">
                                     <div class="form-group">
                                         <label for="nama_barang">Pilih Nama Barang:</label>
@@ -153,4 +161,16 @@
         </div>
         <!-- /.content -->
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $(function() {
+            $('#nama_barang').select2({
+                placeholder: "-- Pilih Barang --",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 @endsection

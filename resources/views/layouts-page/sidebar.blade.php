@@ -11,7 +11,8 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- DASHBOARD -->
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('dashboard') }}"
+                        class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
@@ -88,13 +89,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('laporan.barang-masuk') }}"
+                        class="nav-link {{ request()->routeIs('laporan.barang-masuk') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-file-import"></i>
                         <p>Laporan Barang Masuk</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('laporan.barang-keluar') }}"
+                        class="nav-link {{ request()->routeIs('laporan.barang-keluar') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-file-export"></i>
                         <p>Laporan Barang Keluar</p>
                     </a>

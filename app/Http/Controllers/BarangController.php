@@ -48,18 +48,18 @@ class BarangController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_barang'   => 'required',
-            'deskripsi'     => 'required',
             'gambar'        => 'required|mimes:jpeg,png,jpg',
             'stok_minimum'  => 'required|numeric',
+            'stok_maksimum' => 'required|numeric',
             'jenis_id'      => 'required',
             'satuan_id'     => 'required'
         ], [
             'nama_barang.required'  => 'Form Nama Barang Wajib Di Isi !',
-            'deskripsi.required'    => 'Form Deskripsi Wajib Di Isi !',
             'gambar.required'       => 'Tambahkan Gambar !',
             'gambar.mimes'          => 'Gunakan Gambar Yang Memiliki Format jpeg, png, jpg !',
             'stok_minimum.required' => 'Form Stok Minimum Wajib Di Isi !',
             'stok_minimum.numeric'  => 'Gunakan Angka Untuk Mengisi Form Ini !',
+            'stok_maksimum.required' => 'Form Stok Maksimum Wajib Di Isi !',
             'jenis_id.required'     => 'Pilih Jenis Barang !',
             'satuan_id.required'    => 'Pilih Jenis Barang !'
         ]);
@@ -95,10 +95,10 @@ class BarangController extends Controller
 
         $barang = Barang::create([
             'nama_barang' => $request->nama_barang,
-            'deskripsi'   => $request->deskripsi,
             'kode_barang' => $request->kode_barang,
             'gambar'      => $path . $fileName,
             'stok_minimum' => $request->stok_minimum,
+            'stok_maksimum' => $request->stok_maksimum,
             'jenis_id'    => $request->jenis_id,
             'satuan_id'   => $request->satuan_id
         ]);
@@ -141,17 +141,18 @@ class BarangController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_barang'   => 'required',
-            'deskripsi'     => 'required',
             'gambar'        => 'nullable|mimes:jpeg,png,jpg',
             'stok_minimum'  => 'required|numeric',
+            'stok_maksimum' => 'required|numeric',
             'jenis_id'      => 'required',
             'satuan_id'     => 'required'
         ], [
             'nama_barang.required'  => 'Form Nama Barang Wajib Di Isi !',
-            'deskripsi.required'    => 'Form Deskripsi Wajib Di Isi !',
             'gambar.mimes'          => 'Gunakan Gambar Yang Memiliki Format jpeg, png, jpg !',
             'stok_minimum.required' => 'Form Stok Minimum Wajib Di Isi !',
             'stok_minimum.numeric'  => 'Gunakan Angka Untuk Mengisi Form Ini !',
+            'stok_maksimum.required' => 'Form Stok Maksimum Wajib Di Isi !',
+            'stok_maksimum.numeric' => 'Gunakan Angka Untuk Mengisi Form Ini !',
             'jenis_id.required'     => 'Pilih Jenis Barang !',
             'satuan_id.required'    => 'Pilih Satuan Barang !'
         ]);
@@ -176,7 +177,7 @@ class BarangController extends Controller
         $barang->update([
             'nama_barang'   => $request->nama_barang,
             'stok_minimum'  => $request->stok_minimum,
-            'deskripsi'     => $request->deskripsi,
+            'stok_maksimum' => $request->stok_maksimum,
             'gambar'        => $path,
             'jenis_id'      => $request->jenis_id,
             'satuan_id'     => $request->satuan_id

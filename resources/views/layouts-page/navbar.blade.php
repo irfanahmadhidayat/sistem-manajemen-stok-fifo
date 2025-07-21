@@ -11,38 +11,58 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
         <!-- Notifications Dropdown Menu -->
-        <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
+        <li class="nav-item dropdown" id="notification-dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#" id="notification-bell">
                 <i class="far fa-bell fa-lg"></i>
-                <span class="badge badge-warning navbar-badge">15</span>
+                <span class="badge badge-danger navbar-badge" id="notification-count">0</span>
             </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-header">15 Notifications</span>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-menu">
+                <span class="dropdown-item dropdown-header" id="notification-header">
+                    <span id="notification-total">0</span> Notifikasi
+                </span>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 4 new messages
-                    <span class="float-right text-muted text-sm">3 mins</span>
-                </a>
+                <div id="notification-list">
+                    <!-- Notifications will be loaded here -->
+                </div>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-users mr-2"></i> 8 friend requests
-                    <span class="float-right text-muted text-sm">12 hours</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-file mr-2"></i> 3 new reports
-                    <span class="float-right text-muted text-sm">2 days</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                <a href="#" class="dropdown-item dropdown-footer" data-toggle="modal"
+                    data-target="#allNotificationsModal" id="see-all-notifications">Lihat Semua Notifikasi</a>
             </div>
         </li>
 
-        <!-- User Icon -->
-        <li class="nav-item">
-            <a class="nav-link" href="#">
+        <!-- User Dropdown Menu -->
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="fas fa-user fa-lg"></i>
             </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Log Out
+                    </button>
+                </form>
+            </div>
         </li>
     </ul>
 </nav>
+
+
+<!-- Modal Notifikasi -->
+<div class="modal fade" id="allNotificationsModal" tabindex="-1" role="dialog" aria-labelledby="allNotificationsLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="allNotificationsLabel">Semua Notifikasi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="all-notifications-content">
+                <!-- Isi notifikasi lengkap akan dimuat lewat JS -->
+                <p class="text-center text-muted">Memuat notifikasi...</p>
+            </div>
+        </div>
+    </div>
+</div>

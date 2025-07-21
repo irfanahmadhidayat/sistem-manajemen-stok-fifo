@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Dompdf\Dompdf;
 use App\Models\BarangMasuk;
 use Illuminate\Http\Request;
 use App\Models\BarangKeluarDetail;
@@ -45,5 +46,41 @@ class StokController extends Controller
             'totalSisa',
             'totalKeluar'
         ));
+    }
+
+    public function printPDF(Request $request)
+    {
+        $namaBarangDipilih = $request->input('nama_barang');
+
+        if (!$namaBarangDipilih) {
+            return redirect()->back()->with('error', 'Pilih nama barang terlebih dahulu.');
+        }
+
+        $batchMasuk = BarangMasuk::where('nama_barang', $namaBarangDipilih)->get();
+        $batchKeluar = BarangKeluarDetail::whereHas('barangMasuk', function ($query) use ($namaBarangDipilih) {
+            $query->where('nama_barang', $namaBarangDipilih);
+        })->with('barangMasuk', 'barangKeluar')->get();
+
+        $totalMasuk = $batchMasuk->sum('jumlah_masuk');
+        $totalSisa = $batchMasuk->sum('sisa');
+        $totalKeluar = $batchKeluar->sum('jumlah_keluar');
+
+        // Instansiasi Dompdf
+        $dompdf = new Dompdf();
+
+        // Load HTML view
+        $html = view('layouts-page.stok-penjualan.print', compact(
+            'namaBarangDipilih',
+            'batchMasuk',
+            'batchKeluar',
+            'totalMasuk',
+            'totalSisa',
+            'totalKeluar'
+        ))->render();
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+        $dompdf->stream('stok-penjualan-' . $namaBarangDipilih . '.pdf', ['Attachment' => false]);
     }
 }

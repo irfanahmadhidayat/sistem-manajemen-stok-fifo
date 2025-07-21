@@ -2,31 +2,35 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <title>Laporan Stok</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: sans-serif;
+            font-size: 12px;
         }
 
-        h1,
+        h2,
         p {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
         th,
         td {
+            border: 1px solid #333;
+            padding: 6px;
             text-align: center;
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #eee;
             font-weight: bold;
         }
 
@@ -40,8 +44,8 @@
 </head>
 
 <body>
-    <h1>Laporan Stok</h1>
-    <p>Keterangan : {{ $selectedOption }}</p>
+    <h2>Laporan Stok Barang</h2>
+    <p>Keterangan: {{ $selectedOption }}</p>
 
     <table>
         <thead>
@@ -53,14 +57,18 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($barangs as $index => $barang)
+            @forelse ($barangs as $index => $barang)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $barang->kode_barang }}</td>
                     <td>{{ $barang->nama_barang }}</td>
                     <td>{{ $barang->stok }} {{ $barang->satuan->satuan }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="4">Tidak ada data stok.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 

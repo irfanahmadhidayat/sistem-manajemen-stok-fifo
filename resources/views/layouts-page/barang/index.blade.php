@@ -42,8 +42,9 @@
                                                 <th>Gambar</th>
                                                 <th>Kode Barang</th>
                                                 <th>Nama Barang</th>
-                                                <th>Deskripsi</th>
-                                                <th>Stok</th>
+                                                <th>Stok Minimum</th>
+                                                <th>Stok Maksimum</th>
+                                                <th>Stok Total</th>
                                                 <th>Opsi</th>
                                             </tr>
                                         </thead>
@@ -83,7 +84,8 @@
                     <td><img src="/storage/${value.gambar}" alt="gambar Barang" style="width: 150px"; height="150px"></td>
                     <td>${value.kode_barang}</td>
                     <td>${value.nama_barang}</td>
-                    <td>${value.deskripsi}</td>
+                    <td>${value.stok_minimum}</td>
+                    <td>${value.stok_maksimum}</td>
                     <td>${stok}</td>
                     <td style="text-align: center;">
                         <a href="javascript:void(0)" id="button_detail_barang" data-id="${value.id}" 
@@ -123,18 +125,18 @@
             let gambar = $('#gambar')[0].files[0];
             let nama_barang = $('#nama_barang').val();
             let stok_minimum = $('#stok_minimum').val();
+            let stok_maksimum = $('#stok_maksimum').val();
             let jenis_id = $('#jenis_id').val();
             let satuan_id = $('#satuan_id').val();
-            let deskripsi = $('#deskripsi').val();
             let token = $("meta[name='csrf-token']").attr("content");
 
             let formData = new FormData();
             formData.append('gambar', gambar);
             formData.append('nama_barang', nama_barang);
             formData.append('stok_minimum', stok_minimum);
+            formData.append('stok_maksimum', stok_maksimum);
             formData.append('jenis_id', jenis_id);
             formData.append('satuan_id', satuan_id);
-            formData.append('deskripsi', deskripsi);
             formData.append('_token', token);
 
             $.ajax({
@@ -171,7 +173,8 @@
                                 <td><img src="/storage/${value.gambar}" alt="gambar Barang" style="width: 150px"; height="150px"></td>
                                 <td>${value.kode_barang}</td>
                                 <td>${value.nama_barang}</td>
-                                <td>${value.deskripsi}</td>
+                                <td>${value.stok_minimum}</td>
+                                <td>${value.stok_maksimum}</td>
                                 <td>${stok}</td>
                                 <td style="text-align: center;">
                                     <a href="javascript:void(0)" id="button_detail_barang" data-id="${value.id}" 
@@ -200,7 +203,7 @@
                             $('#preview').attr('src', '');
                             $('#nama_barang').val('');
                             $('#stok_minimum').val('');
-                            $('#deskripsi').val('');
+                            $('#stok_maksimum').val('');
 
                             $('#modal_tambah_barang').modal('hide');
 
@@ -239,6 +242,14 @@
                         $('#alert-stok_minimum').html(error.responseJSON.stok_minimum[0]);
                     }
 
+                    if (error.responseJSON && error.responseJSON.stok_maksimum && error.responseJSON
+                        .stok_maksimum[0]) {
+                        $('#alert-stok_maksimum').removeClass('d-none');
+                        $('#alert-stok_maksimum').addClass('d-block');
+
+                        $('#alert-stok_maksimum').html(error.responseJSON.stok_maksimum[0]);
+                    }
+
                     if (error.responseJSON && error.responseJSON.jenis_id && error.responseJSON
                         .jenis_id[0]) {
                         $('#alert-jenis_id').removeClass('d-none');
@@ -253,14 +264,6 @@
                         $('#alert-satuan_id').addClass('d-block');
 
                         $('#alert-satuan_id').html(error.responseJSON.satuan_id[0]);
-                    }
-
-                    if (error.responseJSON && error.responseJSON.deskripsi && error.responseJSON
-                        .deskripsi[0]) {
-                        $('#alert-deskripsi').removeClass('d-none');
-                        $('#alert-deskripsi').addClass('d-block');
-
-                        $('#alert-deskripsi').html(error.responseJSON.deskripsi[0]);
                     }
                 }
             });
@@ -285,7 +288,7 @@
                     $('#detail_stok').val(response.data.stok !== null && response.data.stok !== '' ?
                         response.data.stok : 'Stok Kosong');
                     $('#detail_stok_minimum').val(response.data.stok_minimum);
-                    $('#detail_deskripsi').val(response.data.deskripsi);
+                    $('#detail_stok_maksimum').val(response.data.stok_maksimum);
 
                     $('#detail_gambar_preview').attr('src', '/storage/' + response.data.gambar);
                     $('#modal_detail_barang').modal('show');
@@ -309,9 +312,9 @@
                     $('#edit_gambar').val(null);
                     $('#edit_nama_barang').val(response.data.nama_barang);
                     $('#edit_stok_minimum').val(response.data.stok_minimum);
+                    $('#edit_stok_maksimum').val(response.data.stok_maksimum);
                     $('#edit_jenis_id').val(response.data.jenis_id);
                     $('#edit_satuan_id').val(response.data.satuan_id);
-                    $('#edit_deskripsi').val(response.data.deskripsi);
                     $('#edit_gambar_preview').attr('src', '/storage/' + response.data.gambar);
 
                     $('#modal_edit_barang').modal('show');
@@ -327,7 +330,7 @@
             let gambar = $('#edit_gambar')[0].files[0];
             let nama_barang = $('#edit_nama_barang').val();
             let stok_minimum = $('#edit_stok_minimum').val();
-            let deskripsi = $('#edit_deskripsi').val();
+            let stok_maksimum = $('#edit_stok_maksimum').val();
             let jenis_id = $('#edit_jenis_id').val();
             let satuan_id = $('#edit_satuan_id').val();
             let token = $("meta[name='csrf-token']").attr("content");
@@ -340,7 +343,7 @@
             }
             formData.append('nama_barang', nama_barang);
             formData.append('stok_minimum', stok_minimum);
-            formData.append('deskripsi', deskripsi);
+            formData.append('stok_maksimum', stok_maksimum);
             formData.append('jenis_id', jenis_id);
             formData.append('satuan_id', satuan_id);
             formData.append('_token', token);
@@ -379,12 +382,15 @@
                     // Memperbarui data pada kolom nama barang (indeks 3)
                     rowData.eq(3).text(response.data.nama_barang);
 
-                    // Memperbarui data pada kolom deskripsi (indeks 4)
-                    rowData.eq(4).text(response.data.deskripsi);
+                    // Memperbarui data pada kolom jenis barang (indeks 4)
+                    rowData.eq(4).text(response.data.stok_minimum);
 
-                    // Memperbarui data pada kolom stok (indeks 5)
+                    // Memperbarui data pada kolom satuan barang (indeks 5)
+                    rowData.eq(5).text(response.data.stok_maksimum);
+
+                    // Memperbarui data pada kolom stok (indeks 6)
                     let stok = response.data.stok != null ? response.data.stok : "Stok Kosong";
-                    rowData.eq(5).text(stok);
+                    rowData.eq(6).text(stok);
 
                     $('#modal_edit_barang').modal('hide');
                 },
@@ -414,6 +420,14 @@
                         $('#alert-stok_minimum').html(error.responseJSON.stok_minimum[0]);
                     }
 
+                    if (error.responseJSON && error.responseJSON.stok_maksimum && error.responseJSON
+                        .stok_maksimum[0]) {
+                        $('#alert-stok_maksimum').removeClass('d-none');
+                        $('#alert-stok_maksimum').addClass('d-block');
+
+                        $('#alert-stok_maksimum').html(error.responseJSON.stok_maksimum[0]);
+                    }
+
                     if (error.responseJSON && error.responseJSON.jenis_id && error.responseJSON
                         .jenis_id[0]) {
                         $('#alert-jenis_id').removeClass('d-none');
@@ -428,14 +442,6 @@
                         $('#alert-satuan_id').addClass('d-block');
 
                         $('#alert-satuan_id').html(error.responseJSON.satuan_id[0]);
-                    }
-
-                    if (error.responseJSON && error.responseJSON.deskripsi && error.responseJSON
-                        .deskripsi[0]) {
-                        $('#alert-deskripsi').removeClass('d-none');
-                        $('#alert-deskripsi').addClass('d-block');
-
-                        $('#alert-deskripsi').html(error.responseJSON.deskripsi[0]);
                     }
                 }
             })
@@ -492,7 +498,8 @@
                                             <td><img src="/storage/${value.gambar}" alt="gambar Barang" style="width: 150px"; height="150px"></td>
                                             <td>${value.kode_barang}</td>
                                             <td>${value.nama_barang}</td>
-                                            <td>${value.deskripsi}</td>
+                                            <td>${value.stok_minimum}</td>
+                                            <td>${value.stok_maksimum}</td>
                                             <td>${stok}</td>
                                             <td>
                                                 <a href="javascript:void(0)" id="button_detail_barang" data-id="${value.id}" class="btn btn-icon btn-success btn-lg mb-2"><i class="far fa-eye"></i> </a>

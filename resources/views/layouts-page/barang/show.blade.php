@@ -68,10 +68,10 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Deskripsi</label>
-                                <textarea class="form-control" name="deskripsi" id="detail_deskripsi" disabled></textarea>
+                                <label>Stok Maksimum</label>
+                                <input type="number" class="form-control" name="stok_maksimum" id="detail_stok_maksimum"
+                                    disabled>
                             </div>
-
                         </div>
                     </div>
                 </div>
