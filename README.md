@@ -4,7 +4,7 @@ Aplikasi **Manajemen Stok Barang berbasis Laravel 11** dengan penerapan **algori
 Tujuan aplikasi ini adalah membantu mengelola stok barang agar tidak terjadi kehabisan stok dan menghindari penumpukan barang kadaluarsa.
 
 
-![alt text] (https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/dashboard.jpeg?raw=true)
+![alt text](https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/dashboard.jpeg?raw=true)
 
 ---
 
@@ -90,10 +90,10 @@ Password: Karyawan#1234
 ```
 ---
 
-![alt text] (https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/barang-masuk.jpeg?raw=true)
+![alt text](https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/barang-masuk.jpeg?raw=true)
 
-![alt text] (https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/barang-keluar.jpeg?raw=true)
+![alt text](https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/barang-keluar.jpeg?raw=true)
 
-![alt text] (https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/fifo.jpeg?raw=true)
+![alt text](https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/fifo.jpeg?raw=true)
 
-![alt text] (https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/notifikasi.jpeg?raw=true)
+![alt text](https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/notifikasi.jpeg?raw=true)
