@@ -3,6 +3,9 @@
 Aplikasi **Manajemen Stok Barang berbasis Laravel 11** dengan penerapan **algoritma FIFO (First In First Out)**.  
 Tujuan aplikasi ini adalah membantu mengelola stok barang agar tidak terjadi kehabisan stok dan menghindari penumpukan barang kadaluarsa.
 
+
+![alt text] (https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/dashboard.jpeg?raw=true)
+
 ---
 
 ## 🚀 Fitur Utama
@@ -86,3 +89,11 @@ Email: karyawan@gmail.com
 Password: Karyawan#1234
 ```
 ---
+
+![alt text] (https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/barang-masuk.jpeg?raw=true)
+
+![alt text] (https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/barang-keluar.jpeg?raw=true)
+
+![alt text] (https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/fifo.jpeg?raw=true)
+
+![alt text] (https://github.com/irfanahmadhidayat/sistem-manajemen-stok-fifo/blob/main/web-image/notifikasi.jpeg?raw=true)
