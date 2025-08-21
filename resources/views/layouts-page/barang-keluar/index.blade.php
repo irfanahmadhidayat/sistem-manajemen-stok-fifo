@@ -263,6 +263,17 @@
                         $('#alert-jumlah_keluar').removeClass('d-none').addClass('d-block')
                             .html(error.responseJSON.jumlah_keluar[0]);
                     }
+
+                    // Alert jika stok tidak cukup (400)
+                    if (error.status === 400 && error.responseJSON && error.responseJSON.message) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: error.responseJSON.message,
+                            confirmButtonText: 'OK'
+                        });
+                    }
+
                 }
             });
         });

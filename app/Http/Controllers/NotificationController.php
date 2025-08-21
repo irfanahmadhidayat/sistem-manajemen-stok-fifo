@@ -19,7 +19,7 @@ class NotificationController extends Controller
             $notifications[] = [
                 'type' => 'stock_empty',
                 'title' => 'Stok Habis',
-                'message' => "Barang <b>{$barang->kode_barang}</b> telah habis",
+                'message' => "Barang <b>{$barang->nama_barang}</b> dengan kode <b>{$barang->kode_barang}</b> telah habis",
                 'icon' => 'fas fa-exclamation-triangle',
                 'color' => 'danger',
                 'priority' => 1

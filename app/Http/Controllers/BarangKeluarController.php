@@ -117,7 +117,8 @@ class BarangKeluarController extends Controller
 
         $batches = BarangMasuk::where('nama_barang', $namaBarang)
             ->where('sisa', '>', 0)
-            ->orderBy('tanggal_masuk')
+            ->orderBy('tanggal_masuk', 'asc')
+            ->orderBy('tanggal_kadaluwarsa', 'asc')
             ->get();
 
         $sisaKeluar = $jumlahKeluar;
@@ -127,7 +128,6 @@ class BarangKeluarController extends Controller
 
             $ambil = min($batch->sisa, $sisaKeluar);
 
-            // Kurangi sisa di batch
             $batch->sisa -= $ambil;
             $batch->save();
 
@@ -195,15 +195,30 @@ class BarangKeluarController extends Controller
      */
     public function destroy(BarangKeluar $barangKeluar)
     {
-        $jumlahKeluar = $barangKeluar->jumlah_keluar;
-        $barangKeluar->delete();
+        // 1. Ambil semua detail batch yang pernah dipakai
+        $details = $barangKeluar->details;
 
+        // 2. Kembalikan stok per-batch
+        foreach ($details as $detail) {
+            $batch = BarangMasuk::find($detail->barang_masuk_id);
+            if ($batch) {
+                $batch->sisa += $detail->jumlah_keluar;
+                $batch->save();
+            }
+        }
+
+        // 3. Kembalikan stok utama barang
         $barang = Barang::where('nama_barang', $barangKeluar->nama_barang)->first();
         if ($barang) {
-            $barang->stok += $jumlahKeluar;
+            $barang->stok += $barangKeluar->jumlah_keluar;
             $barang->save();
         }
 
+        // 4. Hapus detail dan data utama
+        $barangKeluar->details()->delete();
+        $barangKeluar->delete();
+
+        // 5. Return response
         return response()->json([
             'success' => true,
             'message' => 'Data Berhasil Dihapus!'

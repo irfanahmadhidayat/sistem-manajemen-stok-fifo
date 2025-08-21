@@ -19,41 +19,43 @@
                 </li>
 
                 <!-- DATA MASTER -->
-                <li class="nav-header">DATA MASTER</li>
-                <li
-                    class="nav-item {{ request()->routeIs('barang.index', 'jenis-barang.index', 'satuan-barang.index') ? 'menu-open' : '' }}">
-                    <a href="#"
-                        class="nav-link {{ request()->routeIs('barang.index', 'jenis-barang.index', 'satuan-barang.index') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>
-                            Barang
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('barang.index') }}"
-                                class="nav-link {{ request()->routeIs('barang.index') ? 'active' : '' }}">
-                                <i class="fas fa-tag nav-icon"></i>
-                                <p>Nama Barang</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('jenis-barang.index') }}"
-                                class="nav-link {{ request()->routeIs('jenis-barang.index') ? 'active' : '' }}">
-                                <i class="fas fa-th-list nav-icon"></i>
-                                <p>Jenis Barang</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('satuan-barang.index') }}"
-                                class="nav-link {{ request()->routeIs('satuan-barang.index') ? 'active' : '' }}">
-                                <i class="fas fa-ruler-combined nav-icon"></i>
-                                <p>Satuan Barang</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                @if (Auth::user()->role === 'admin')
+                    <li class="nav-header">DATA MASTER</li>
+                    <li
+                        class="nav-item {{ request()->routeIs('barang.index', 'jenis-barang.index', 'satuan-barang.index') ? 'menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ request()->routeIs('barang.index', 'jenis-barang.index', 'satuan-barang.index') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-box"></i>
+                            <p>
+                                Barang
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('barang.index') }}"
+                                    class="nav-link {{ request()->routeIs('barang.index') ? 'active' : '' }}">
+                                    <i class="fas fa-tag nav-icon"></i>
+                                    <p>Nama Barang</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('jenis-barang.index') }}"
+                                    class="nav-link {{ request()->routeIs('jenis-barang.index') ? 'active' : '' }}">
+                                    <i class="fas fa-th-list nav-icon"></i>
+                                    <p>Jenis Barang</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('satuan-barang.index') }}"
+                                    class="nav-link {{ request()->routeIs('satuan-barang.index') ? 'active' : '' }}">
+                                    <i class="fas fa-ruler-combined nav-icon"></i>
+                                    <p>Satuan Barang</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
 
                 <!-- TRANSAKSI -->
                 <li class="nav-header">TRANSAKSI</li>

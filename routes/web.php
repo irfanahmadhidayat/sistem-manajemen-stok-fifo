@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AdminOnly;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\JenisController;
@@ -25,14 +26,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
 
     // Barang Master
-    Route::get('/barang/get-data', [BarangController::class, 'getDataBarang']);
-    Route::resource('/barang', BarangController::class);
+    Route::middleware(['auth', AdminOnly::class])->group(function () {
+        Route::get('/barang/get-data', [BarangController::class, 'getDataBarang']);
+        Route::resource('/barang', BarangController::class);
 
-    Route::get('/jenis-barang/get-data', [JenisController::class, 'getDataJenisBarang']);
-    Route::resource('/jenis-barang', JenisController::class);
+        Route::get('/jenis-barang/get-data', [JenisController::class, 'getDataJenisBarang']);
+        Route::resource('/jenis-barang', JenisController::class);
 
-    Route::get('/satuan-barang/get-data', [SatuanController::class, 'getDataSatuanBarang']);
-    Route::resource('/satuan-barang', SatuanController::class);
+        Route::get('/satuan-barang/get-data', [SatuanController::class, 'getDataSatuanBarang']);
+        Route::resource('/satuan-barang', SatuanController::class);
+    });
 
     // Barang Masuk
     Route::get('/api/barang-masuk/', [BarangMasukController::class, 'getAutoCompleteData']);

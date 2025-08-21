@@ -139,7 +139,7 @@
                     $.each(response.data, function(key, value) {
                         let barangMasuk = `
                 <tr class="barang-row" id="index_${value.id}">
-                    <td>${counter++}</td>   
+                    <td>${counter++}</td>
                     <td>${value.kode_transaksi}</td>
                     <td>${value.nama_barang}</td>
                     <td>${value.tanggal_masuk}</td>
@@ -212,7 +212,7 @@
                             $.each(response.data, function(key, value) {
                                 let barangMasuk = `
                                 <tr class="barang-row" id="index_${value.id}">
-                                    <td>${counter++}</td>   
+                                    <td>${counter++}</td>
                                     <td>${value.kode_transaksi}</td>
                                     <td>${value.nama_barang}</td>
                                     <td>${value.tanggal_masuk}</td>
@@ -322,7 +322,7 @@
                                     $.each(response.data, function(key, value) {
                                         let barangMasuk = `
                                         <tr class="barang-row" id="index_${value.id}">
-                                            <td>${counter++}</td>   
+                                            <td>${counter++}</td>
                                             <td>${value.kode_transaksi}</td>
                                             <td>${value.nama_barang}</td>
                                             <td>${value.tanggal_masuk}</td>

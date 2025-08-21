@@ -66,6 +66,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Kode Transaksi</th>
+                                                <th>Nama Barang</th>
                                                 <th>Tanggal Keluar</th>
                                                 <th>Jumlah Keluar</th>
                                             </tr>
@@ -75,6 +76,7 @@
                                                 <tr>
                                                     <td>{{ $index + 1 }}</td>
                                                     <td>{{ $keluar->kode_transaksi }}</td>
+                                                    <td>{{ $keluar->nama_barang }}</td>
                                                     <td>{{ $keluar->tanggal_keluar }}</td>
                                                     <td>{{ $keluar->jumlah_keluar }}</td>
                                                 </tr>
